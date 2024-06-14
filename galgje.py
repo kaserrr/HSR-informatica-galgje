@@ -12,12 +12,13 @@ def word():
 def game():
     word_list = word()  # Haal het woord van de eerste speler op
     guessed_letters = []  # Lijst om geraden letters bij te houden
+    guessed_word = ['_'] * len(word_list)  # Lijst om de voortgang van het geraden woord bij te houden
     attempts = 9  # Aantal pogingen dat de tweede speler heeft
 
     clear_screen()  # Wis de console om het woord te verbergen
 
-    while attempts > 0:  # Loop zolang er pogingen over zijn
-        guess = input('Speler 2: Raad een letter: ').strip().lower()  # Vraag de tweede speler om een letter te raden
+    while attempts > 0:
+        guess = input('Speler 2: Raad een letter: ').strip().lower()
 
         clear_screen()  # Wis de console na elke invoer
 
@@ -26,12 +27,18 @@ def game():
         elif guess in word_list:  # Controleer of de letter in het woord voorkomt
             guessed_letters.append(guess)  # Voeg de geraden letter toe aan de lijst
             print('Goed geraden!')
-            print(f'Geraden letters: {guessed_letters}')  # Toon de lijst met geraden letters
+
+            # Vervang de lege plekken in guessed_word door de geraden letter
+            for index, letter in enumerate(word_list):
+                if letter == guess:
+                    guessed_word[index] = guess
+
+            print(f'Voortgang: {" ".join(guessed_word)}')  # Toon de voortgang van het geraden woord
 
             # Controleer of alle letters in het woord zijn geraden
-            if set(word_list) <= set(guessed_letters):
+            if '_' not in guessed_word:
                 print(f'Gefeliciteerd! Je hebt het woord geraden, het woord was "{ "".join(word_list) }"')
-                break  # Verlaat de loop als het woord is geraden
+                break  # Stop de loop als het woord is geraden
         else:
             attempts -= 1  # Verminder het aantal pogingen als de letter fout is
             print(f'Fout geraden, je hebt nog {attempts} pogingen over')
